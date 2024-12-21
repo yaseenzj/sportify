@@ -210,8 +210,8 @@
 
   <!-- Login Page -->
   <div id="login-page" class="login-container">
-    <h1 style="margin-bottom: 0px;">Sportify v1.2</h1> <!-- Reduced margin-bottom -->
-  <p style="font-size: 0.8em; color: #ccc; margin-top: 0;">dev by @wihyaseen</p>
+    <h1 style="margin-bottom: 0px;">Sportify v1.2.1</h1> <!-- Reduced margin-bottom -->
+  <p style="font-size: 0.8em; color: #ccc; margin-top: 0;">Eduational project by @wihyaseen</p>
     <form id="login-form">
       <input type="text" id="username" placeholder="Username" required>
       <input type="password" id="password" placeholder="Password" required>
@@ -223,6 +223,7 @@
     <div id="changelog">
       <p><strong>Changelog:</strong></p>
       <ul>
+        <li><strong>v1.2.1:</strong> Added Live channels like WWE, Laliga Matches. </li>
         <li><strong>v1.2:</strong> Added Jio & Sony Support. Improved UI response. Fixed minor bugs. Updated Login Page </li>
         <li><strong>v1.0:</strong> Initial release with login and basic match display functionality.</li>
       </ul>
@@ -279,50 +280,143 @@
           category: 'SonyLIV'
         }));
 
+        const liveChannels = [
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'AstroHD',
+    src: 'https://dj7fdt04hl8tv.cloudfront.net/acm/media/njoi/njoi-apps-acmmasthead-_njoi-acmasthead-cricket-656x388.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdtv.pages.dev/Bastro', // Stream URL
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Tnt Sports 1',
+    src: 'https://cdn.comedy.co.uk/images/channels/tnt_sports_1.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/Tnt1',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Tnt Sports 2',
+    src: 'https://cdn.comedy.co.uk/images/channels/tnt_sports_2.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/Tnt2',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Tnt Sports 3',
+    src: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEilXTAQNlBzLL4p2Efk0pN4eftd3VRPXf3BxYFCaCj34__FKqW-gHbFD-Nk5AUBIZPMiKh2oiXec2F3uuAxnNh4C-SYiNL2be1TuyV9_y1vfs6PEnX5Diji3vthT2kqnyg8AwXQ96hkb0qP9SLT6dpb9vcZcxGVV_W0irEgITGchbiF-RqPVHPy84HQdvo/s311/download.png', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/Tnt3',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Tennis 24/7',
+    src: 'https://i0.wp.com/tennisthreads.net/wp-content/uploads/2021/08/tennis-channel-logo-e1629452205432.png', // Replace with actual thumbnail URL
+    dai_url: 'https://shz.al/Sffb/livecricplayer.html?dtv=https://d3qg0hadt0dkov.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-3sfgyrfz9zduo-prod/amgtennisus/playlist.m3u8',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Star Sports 1 ENG',
+    src: 'https://exchange4media.gumlet.io/news-photo/93752-StarSports1Kannada.jpg?w=900&dpr=2.6', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdm3u8player.pages.dev/?dtv=https://matrixm3u8.govag55623.workers.dev/https://vkvsd14.okcdn.ru/cmaf/7479532849895/sig/QKq-QpCPyq0/expires/1734833391698/srcIp/13.202.34.144/urls/185.226.52.66/clientType/13/srcAg/CHROME/mid/9171296398311/get/hls_9171296398311.cGxuCiq8K1E.m3u8',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Fox Sports 501',
+    src: 'https://gotrialpro.com/wp-content/uploads/edd/2024/10/Fox-Sports-Free-Trial.png', // Replace with actual thumbnail URL
+    dai_url: 'https://shz.al/Sffb/livecricplayer.html?dtv=https://m118753.protect-cdn.net/live/m1-index.m3u8',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Willow HD',
+    src: 'https://static.toiimg.com/thumb/msid-98738864,width-1280,height-720,resizemode-4/98738864.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://crictos99.pages.dev/willow',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'WWE',
+    src: 'https://i.pinimg.com/736x/6c/97/79/6c9779422ba862490503f6fe3cab5723.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://shz.al/Sffb/livecricplayer.html?dtv=https://sparkforge.store/live/random/chunks.m3u8?bongls.com',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Peacock Football',
+    src: 'https://www.peacocktv.com/dam/commerce/assets/logo-peacock-nbcsports-1200x628.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=ips',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Laliga Football',
+    src: 'https://images.seeklogo.com/logo-png/48/1/la-liga-logo-png_seeklogo-480414.png?v=1958566091862699680', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=laligatv',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'USA network Football',
+    src: 'https://i.pinimg.com/564x/6a/18/67/6a18674907fc30d607e5570e62be133c.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=usanetwork',
+  },
+];
+  
+
         const response3 = await fetch('https://raw.githubusercontent.com/GyanibroCricketChannel/Jiocinema/refs/heads/main/index.html');
-        const data3 = await response3.text();
-        const regex = /src="(https:\/\/gyanibro2024\.github\.io\/Players\/\?dtv=https:\/\/[^\"]+)"/g;
-        const jiocinemaMatches = [];
-        let match;
+const data3 = await response3.text();
+const regex = /src="(https:\/\/gyanibro2024\.github\.io\/Players\/\?dtv=https:\/\/[^\"]+)"/g;
+const jiocinemaMatches = [];
+let match;
 
-        while ((match = regex.exec(data3)) !== null) {
-          const dtvUrl = match[1].split('?dtv=')[1];
-          const matchName = "Pak vs SA";  // You can change this to dynamically detect the match name if needed
+while ((match = regex.exec(data3)) !== null) {
+  const dtvUrl = match[1].split('?dtv=')[1];
 
-          // Check if the match is "Pak vs SA" and assign a thumbnail
-          let thumbnailUrl = "";
-          if (matchName === "Pak vs SA") {
-            thumbnailUrl = "https://v3img.voot.com/resizeMedium,w_914,h_514/v3Storage/assets/2nd_odi_sa_vs_pak_live_clean_ctv-1734587785278.jpg";
-          }
+  // Validate the .m3u8 link
+  if (dtvUrl && dtvUrl.includes(".m3u8")) {
+    const matchName = "Pak vs SA"; // Example: Static match name, update logic if dynamic names are required
+    let thumbnailUrl = "";
 
-          // Push the match into the array with its respective details
-          jiocinemaMatches.push({
-            category: 'JioCinema',
-            subcategory: 'General',
-            match_name: matchName,
-            src: thumbnailUrl || `https://gyanibro2024.github.io/Players/?dtv=${dtvUrl}`,  // Use the thumbnail if available
-            dai_url: dtvUrl
-          });
-        }
+    if (matchName === "Pak vs SA") {
+      thumbnailUrl = "https://v3img.voot.com/resizeMedium,w_914,h_514/v3Storage/assets/2nd_odi_sa_vs_pak_live_clean_ctv-1734587785278.jpg";
+    }
 
-        // Adding the new URL to Jiocinema in the General category
-        jiocinemaMatches.push({
-          category: 'JioCinema',
-          subcategory: 'General',
-          match_name: "Sports18 Khel Match",
-          src: "https://v3img.voot.com/v3Storage/assets/sports18_khel_tray-1693931658589.jpg",  // Leave the src blank for now, you can add it manually
-          dai_url: "https://jcevents.jiocinema.com/bpk-tv/Sports18_Khel_voot_MOB/Fallback/hdntl=exp=1734696001~acl=%2f*~id=8bfa83d1ce9c085121cd42e14795e4ae~data=hdntl~hmac=6b75954cb0a97ac88df2cef7f845a8b3c2089537656d3367661700eac952ad71/index.m3u8"
-        });
-        jiocinemaMatches.push({
-          category: 'JioCinema',
-          subcategory: 'General',
-          match_name: "IND w vs WI w",
-          src: "https://v3img.voot.com/resizeMedium,w_914,h_514/v3Storage/assets/3_t20i_women_ind_vs_wi_live_clean_ctv-1734613481543.jpg",  // Leave the src blank for now, you can add it manually
-          dai_url: "https://prod-sports-eng-gm.jiocinema.com/hls/live/2100307/hd_akamai_merged_avc_eng_cricket_m6_191224/master.m3u8"
-        });
+    // Add only valid matches to the list
+    jiocinemaMatches.push({
+      category: 'JioCinema',
+      subcategory: 'General',
+      match_name: matchName,
+      src: thumbnailUrl || `https://gyanibro2024.github.io/Players/?dtv=${dtvUrl}`,
+      dai_url: dtvUrl,
+    });
+  }
+}
+
+// Optionally, add additional static matches if needed
+jiocinemaMatches.push({
+  category: 'JioCinema',
+  subcategory: 'General',
+  match_name: "Sports18 Khel Match",
+  src: "https://v3img.voot.com/v3Storage/assets/sports18_khel_tray-1693931658589.jpg",
+  dai_url: "https://jcevents.jiocinema.com/bpk-tv/Sports18_Khel_voot_MOB/Fallback/hdntl=exp=1734696001~acl=%2f*~id=8bfa83d1ce9c085121cd42e14795e4ae~data=hdntl~hmac=6b75954cb0a97ac88df2cef7f845a8b3c2089537656d3367661700eac952ad71/index.m3u8",
+});
+
+jiocinemaMatches.push({
+  category: 'JioCinema',
+  subcategory: 'General',
+  match_name: "IND w vs WI w",
+  src: "https://v3img.voot.com/resizeMedium,w_914,h_514/v3Storage/assets/3_t20i_women_ind_vs_wi_live_clean_ctv-1734613481543.jpg",
+  dai_url: "https://prod-sports-eng-gm.jiocinema.com/hls/live/2100307/hd_akamai_merged_avc_eng_cricket_m6_191224/master.m3u8",
+});
+
         
         // Adding the new matches
-        const allMatches = [...matches1, ...matches2, ...jiocinemaMatches];
+        const allMatches = [...liveChannels,...matches1, ...matches2, ...jiocinemaMatches];
         displayCategories(allMatches);
         setHeaderBackground(allMatches);
       } catch (error) {
@@ -374,12 +468,26 @@
             <div class="match-overlay">
               <p>${match.match_name}</p>
             </div>`;
+            card.addEventListener("click", () => {
+  let playerUrl;
 
+  // Only allow direct opening for "Live Sports Channels"
+  if (match.category === 'Live Sports Channels') {
+    playerUrl = match.dai_url;  // Directly use the dai_url for Live Sports Channels
+  } else {
+    // For all other categories, redirect via shz.al or other provided URL
+    playerUrl = `https://shz.al/Sffb/livecricplayer.html?dtv=${encodeURIComponent(match.dai_url)}`;
+  }
+
+  // Open the player URL in a new tab
+  window.open(playerUrl, '_blank');
+});
+  
           card.addEventListener("click", () => {
             const playerUrl = `https://shz.al/Sffb/livecricplayer.html?dtv=${encodeURIComponent(match.dai_url)}`;
             window.open(playerUrl, '_blank');
           });
-
+          
           wrapper.appendChild(card);
         });
 
