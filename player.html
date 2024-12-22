@@ -1,61 +1,565 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>M3U8 Player</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            height: 100%;
-            background-color: black;
-        }
-        video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch Live Sports</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #141414;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .login-container {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 10px;
+      width: 400px;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 0 0 100px rgba(255, 239, 191, 0.4); /* Soft cyan glow effect */
+    }
+
+    h1 {
+      font-size: 2.5em;
+    }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 2px solid #444;
+      border-radius: 5px;
+      background-color: #333;
+      color: white;
+      box-sizing: border-box; /* Ensures padding is included in width */
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #333;
+      border: none;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #444;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 1em;
+      margin-top: 10px;
+      display: none;
+    }
+
+    #changelog {
+      font-size: 0.9em;
+      color: #ccc;
+      text-align: left;
+      margin-top: 20px;
+    }
+
+    #changelog ul {
+      padding-left: 20px;
+    }
+
+    #changelog li {
+      margin-bottom: 5px;
+    }
+
+    header {
+      position: relative;
+      height: 60vh;
+      background-color: black;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .header-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    .header-content {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      color: white;
+    }
+
+    .header-content h1 {
+      font-size: 4em;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .category-section {
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .category-section h2 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+
+    .subcategory {
+      margin-left: 20px;
+    }
+
+    .matches-list-wrapper {
+      position: relative;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .match {
+      position: relative;
+      width: calc(20% - 20px);
+      height: 140px;
+      cursor: pointer;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+      margin-bottom: 20px;
+    }
+
+    .match img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .match:hover img {
+      transform: scale(1.1);
+    }
+
+    .match-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .match:hover .match-overlay {
+      opacity: 1;
+    }
+
+    .match-overlay p {
+      margin: 0;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    @media (max-width: 1024px) {
+      .match {
+        width: calc(33.33% - 20px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .match {
+        width: calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .match {
+        width: calc(100% - 20px);
+      }
+    }
+
+  </style>
 </head>
 <body>
-    <video id="video" autoplay playsinline></video>
-    <script>
-        // Function to get query parameters from the URL
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
+
+  <!-- Login Page -->
+  <div id="login-page" class="login-container">
+    <h1 style="margin-bottom: 0px;">Sportify v1.2.2</h1> <!-- Reduced margin-bottom -->
+  <p style="font-size: 0.8em; color: #ccc; margin-top: 0;">Educational project by Yaseen</p>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+    </form>
+    <p class="error-message" id="error-message">Incorrect username or password</p>
+
+    <!-- Changelog Section -->
+    <div id="changelog">
+      <p><strong>Changelog:</strong></p>
+      <ul>
+        <li><strong>v1.2.2:</strong> Updated Ind w vs SL w, Willow Xtra, Pak vs SA </li>
+        <li><strong>v1.2.1:</strong> Added Live channels like WWE, Laliga Matches, Big Boss </li>
+        <li><strong>v1.2:</strong> Added Jio & Sony Support. Improved UI response. Fixed minor bugs. Updated Login Page </li>
+        <li><strong>v1.0:</strong> Initial release with login and basic match display functionality.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Main Content (Live Sports) -->
+  <div id="main-content" style="display: none;">
+    <header id="header" style="background-image: url('');">
+      <div class="header-overlay"></div>
+      <div class="header-content">
+        <h1>HLS Fetcher by Yaseen</h1>
+        <p>This is made for educational purposes.</p>
+        <p>Contact @wihyaseen if any bug.. </p>
+      </div>
+    </header>
+
+    <section class="content" id="match-categories"></section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    document.getElementById("login-form").addEventListener("submit", function(event) {
+      event.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username === "yaseen" && password === "yaseen") {
+        document.getElementById("login-page").style.display = "none";
+        document.getElementById("main-content").style.display = "block";
+        fetchMatchData();
+      } else {
+        document.getElementById("error-message").style.display = "block";
+      }
+    });
+
+    const matchCategories = document.getElementById("match-categories");
+    const header = document.getElementById("header");
+
+    async function fetchMatchData() {
+      try {
+        const response1 = await fetch('https://raw.githubusercontent.com/drmlive/fancode-live-events/refs/heads/main/fancode.json');
+        const data1 = await response1.json();
+        const matches1 = data1.matches.map(match => ({
+          ...match,
+          category: 'FanCode',
+          subcategory: match.category || 'General'
+        }));
+
+        const response2 = await fetch('https://raw.githubusercontent.com/drmlive/sliv-live-events/refs/heads/main/sonyliv.json');
+        const data2 = await response2.json();
+        const matches2 = data2.matches.map(match => ({
+          ...match,
+          category: 'SonyLIV'
+        }));
+
+        const liveChannels = [
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'AstroHD',
+    src: 'https://dj7fdt04hl8tv.cloudfront.net/acm/media/njoi/njoi-apps-acmmasthead-_njoi-acmasthead-cricket-656x388.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://shz.al/6sjG.html', // Stream URL
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Bein Sports 1',
+    src: 'https://www.kds.tw/upload/images/logo/logo/6615e67686998_5g00.png', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=abein1', // Stream URL
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Bein Sports 2',
+    src: 'https://dj7fdt04hl8tv.cloudfront.net/acm/media/njoi/beinsports-2_1.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=abein2', // Stream URL
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Bein Sports 3',
+    src: 'https://dj7fdt04hl8tv.cloudfront.net/acm/media/njoi/beinsports-3.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=abein3', // Stream URL
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'CBS Sports',
+    src: 'https://logowik.com/content/uploads/images/cbs-sports6150.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://shz.al/Sffb/livecricplayer.html?dtv=https://play1nm.hnyongshun.cn/live/ballbar_30760.m3u8?bdstreams.bio.link',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Sky Sports Box Office',
+    src: 'https://static.skyassets.com/contentstack/assets/blt31e50ba245397204/blt176b39a5e4b3b643/5fd214aea84f233eaf6105ec/download', // Replace with actual thumbnail URL
+    dai_url: 'https://shz.al/Sffb/livecricplayer.html?dtv=https://hastycast.live/hls/griogoehvn2.m3u8?st=Vz1pq-1wPilRS0poU3WNQC2BH3Quf4ZhHCbkGlViiVg&e=1734813124',
+  },
+  
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Fox Sports 501 (use phone)',
+    src: 'https://gotrialpro.com/wp-content/uploads/edd/2024/10/Fox-Sports-Free-Trial.png', // Replace with actual thumbnail URL
+    dai_url: 'https://m118753.protect-cdn.net/live/m1-index.m3u8',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Laliga Football',
+    src: 'https://images.seeklogo.com/logo-png/48/1/la-liga-logo-png_seeklogo-480414.png?v=1958566091862699680', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=laligatv',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'NBC Sports',
+    src: 'https://cdn6.aptoide.com/imgs/5/5/f/55feaa868842f483fcbd131bafaba6a0_fgraphic.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=nbc',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Star Sports 1 ENG',
+    src: 'https://exchange4media.gumlet.io/news-photo/93752-StarSports1Kannada.jpg?w=900&dpr=2.6', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdm3u8player.pages.dev/?dtv=https://matrixm3u8.govag55623.workers.dev/https://vkvsd14.okcdn.ru/cmaf/7479532849895/sig/QKq-QpCPyq0/expires/1734833391698/srcIp/13.202.34.144/urls/185.226.52.66/clientType/13/srcAg/CHROME/mid/9171296398311/get/hls_9171296398311.cGxuCiq8K1E.m3u8',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Sony Sports 2HD (use phone)',
+    src: 'https://bdixtv24.com/uploads/tv_image/sony-ten-2-hd.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://dai.google.com/ssai/event/Syu8F41-R1y_JmQ7x0oNxQ/master.m3u8',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Sports 18',
+    src: 'https://v3img.voot.com/v3Storage/assets/sports-1650022814422.png', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdm3u8player.pages.dev/?dtv=https://jiotvbpklive.cdn.jio.com/bpk-tv/IDCDemo_IPL23_Sports18_MOB/Fallback/index.m3u8',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Tnt Sports 1',
+    src: 'https://cdn.comedy.co.uk/images/channels/tnt_sports_1.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/Tnt1',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Tnt Sports 2',
+    src: 'https://cdn.comedy.co.uk/images/channels/tnt_sports_2.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/Tnt2',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Tnt Sports 3',
+    src: 'https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEilXTAQNlBzLL4p2Efk0pN4eftd3VRPXf3BxYFCaCj34__FKqW-gHbFD-Nk5AUBIZPMiKh2oiXec2F3uuAxnNh4C-SYiNL2be1TuyV9_y1vfs6PEnX5Diji3vthT2kqnyg8AwXQ96hkb0qP9SLT6dpb9vcZcxGVV_W0irEgITGchbiF-RqPVHPy84HQdvo/s311/download.png', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/Tnt3',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Tennis 24/7',
+    src: 'https://i0.wp.com/tennisthreads.net/wp-content/uploads/2021/08/tennis-channel-logo-e1629452205432.png', // Replace with actual thumbnail URL
+    dai_url: 'https://shz.al/Sffb/livecricplayer.html?dtv=https://d3qg0hadt0dkov.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-3sfgyrfz9zduo-prod/amgtennisus/playlist.m3u8',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'USA network Football',
+    src: 'https://i.pinimg.com/564x/6a/18/67/6a18674907fc30d607e5570e62be133c.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=usanetwork',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Willow HD',
+    src: 'https://static.toiimg.com/thumb/msid-98738864,width-1280,height-720,resizemode-4/98738864.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://crictos99.pages.dev/willow',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'Willow Xtra (VPN)',
+    src: 'https://bdixtv24.com/uploads/tv_image/willowextra.png', // Replace with actual thumbnail URL
+    dai_url: 'https://livecrichdofficial.pages.dev/Xtra',
+  },
+  {
+    category: 'Live Sports Channels',
+    subcategory: 'General',
+    match_name: 'WWE',
+    src: 'https://i.pinimg.com/736x/6c/97/79/6c9779422ba862490503f6fe3cab5723.jpg', // Replace with actual thumbnail URL
+    dai_url: 'https://shz.al/Sffb/livecricplayer.html?dtv=https://sparkforge.store/live/random/chunks.m3u8?bongls.com',
+  },
+];
+  
+
+        const response3 = await fetch('https://raw.githubusercontent.com/GyanibroCricketChannel/Jiocinema/refs/heads/main/index.html');
+const data3 = await response3.text();
+const regex = /src="(https:\/\/gyanibro2024\.github\.io\/Players\/\?dtv=https:\/\/[^\"]+)"/g;
+const jiocinemaMatches = [];
+let match;
+
+while ((match = regex.exec(data3)) !== null) {
+  const dtvUrl = match[1].split('?dtv=')[1];
+
+  // Validate the .m3u8 link
+  if (dtvUrl && dtvUrl.includes(".m3u8")) {
+    const matchName = "Pak vs SA"; // Example: Static match name, update logic if dynamic names are required
+    let thumbnailUrl = "";
+
+    if (matchName === "Pak vs SA") {
+      thumbnailUrl = "https://v3img.voot.com/resizeMedium,w_914,h_514/v3Storage/assets/2nd_odi_sa_vs_pak_live_clean_ctv-1734587785278.jpg";
+    }
+
+    // Add only valid matches to the list
+    jiocinemaMatches.push({
+      category: 'JioCinema',
+      subcategory: 'General',
+      match_name: matchName,
+      src: thumbnailUrl || `https://gyanibro2024.github.io/Players/?dtv=${dtvUrl}`,
+      dai_url: dtvUrl,
+    });
+  }
+}
+
+// Optionally, add additional static matches if needed
+jiocinemaMatches.push({
+  category: 'JioCinema',
+  subcategory: 'General',
+  match_name: "Big Boss",
+  src: "https://v3img.voot.com/v3Storage/assets/16x9-1728316195515.jpg",
+  dai_url: "https://prod-ent-live-cf.jiocinema.com/hls/live/2101885/uhd_akamai_atv_avc_eptv_bbhindi_s18_day77/master.m3u8",
+});
+
+jiocinemaMatches.push({
+  category: 'JioCinema',
+  subcategory: 'General',
+  match_name: "IND w vs WI w",
+  src: "https://v3img.voot.com/resizeMedium,w_914,h_514/v3Storage/assets/3_t20i_women_ind_vs_wi_live_clean_ctv-1734613481543.jpg",
+  dai_url: "https://prod-sports-eng-cf.jiocinema.com/hls/live/2100307/hd_akamai_merged_avc_eng_cricket_m5_221224/master.m3u8",
+});
+
+        
+        // Adding the new matches
+        const allMatches = [...liveChannels,...matches1, ...matches2, ...jiocinemaMatches];
+        displayCategories(allMatches);
+        setHeaderBackground(allMatches);
+      } catch (error) {
+        console.error("Error fetching match data:", error);
+      }
+    }
+
+    function displayCategories(matches) {
+      const categories = {};
+      matches.forEach(match => {
+        // Skip if no valid stream source is found
+        if (!match.src || !match.dai_url) {
+          return; // Skip this match if no valid stream URL or thumbnail is available
         }
 
-        const m3u8Url = getQueryParam('dtv'); // Fetch the 'dtv' parameter from the URL
+        const category = match.category || "Other";
+        if (!categories[category]) categories[category] = {};
 
-        if (m3u8Url) {
-            const video = document.getElementById('video');
+        const subcategory = match.subcategory || "General";
+        if (!categories[category][subcategory]) categories[category][subcategory] = [];
 
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(m3u8Url);
-                hls.attachMedia(video);
-                hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                    video.play();
-                });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                // For Safari or other browsers with native HLS support
-                video.src = m3u8Url;
-                video.addEventListener('loadedmetadata', function () {
-                    video.play();
-                });
-            } else {
-                alert('Your browser does not support M3U8 playback.');
-            }
-        } else {
-            alert('No M3U8 URL found in the "dtv" query parameter.');
-        }
-    </script>
+        categories[category][subcategory].push(match);
+      });
+
+      matchCategories.innerHTML = "";
+      Object.entries(categories).forEach(([category, subcategories]) => {
+        createCategorySection(category, subcategories);
+      });
+    }
+
+    function createCategorySection(category, subcategories) {
+      const section = document.createElement("div");
+      section.classList.add("category-section");
+      section.innerHTML = `<h2>${category}</h2>`;
+
+      Object.entries(subcategories).forEach(([subcategory, matches]) => {
+        const subcategoryDiv = document.createElement("div");
+        subcategoryDiv.classList.add("subcategory");
+        subcategoryDiv.innerHTML = `<h3>${subcategory}</h3>`;
+
+        const wrapper = document.createElement("div");
+        wrapper.classList.add("matches-list-wrapper");
+
+        matches.forEach(match => {
+          const card = document.createElement("div");
+          card.classList.add("match");
+          card.innerHTML = `
+            <img src="${match.src}" alt="${match.match_name}">
+            <div class="match-overlay">
+              <p>${match.match_name}</p>
+            </div>`;
+            card.addEventListener("click", () => {
+  let playerUrl;
+
+  // Only allow direct opening for "Live Sports Channels"
+  if (match.category === 'Live Sports Channels') {
+    playerUrl = match.dai_url;  // Directly use the dai_url for Live Sports Channels
+  } else {
+    // For all other categories, redirect via shz.al or other provided URL
+    playerUrl = `https://shz.al/Sffb/livecricplayer.html?dtv=${encodeURIComponent(match.dai_url)}`;
+  }
+
+  // Open the player URL in a new tab
+  window.open(playerUrl, '_blank');
+});
+  
+          card.addEventListener("click", () => {
+            const playerUrl = `https://shz.al/Sffb/livecricplayer.html?dtv=${encodeURIComponent(match.dai_url)}`;
+            window.open(playerUrl, '_blank');
+          });
+          
+          wrapper.appendChild(card);
+        });
+
+        subcategoryDiv.appendChild(wrapper);
+        section.appendChild(subcategoryDiv);
+      });
+
+      matchCategories.appendChild(section);
+    }
+
+    function setHeaderBackground(matches) {
+      const randomMatch = matches[Math.floor(Math.random() * matches.length)];
+      header.style.backgroundImage = `url('${randomMatch.src}')`;
+    }
+  </script>
 </body>
 </html>
