@@ -3,11 +3,18 @@ document.getElementById("login-form").addEventListener("submit", function(event)
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
+    console.log("Login form submitted");
+    
     if (username === "yaseen" && password === "yaseen") {
+        console.log("Login successful");
+
         document.getElementById("login-page").style.display = "none";
         document.getElementById("main-content").style.display = "block";
+
+        // Fetch match data after login
         fetchMatchData();
     } else {
+        console.log("Login failed");
         document.getElementById("error-message").style.display = "block";
     }
 });
@@ -17,8 +24,12 @@ const header = document.getElementById("header");
 
 async function fetchMatchData() {
     try {
+        console.log("Fetching match data...");
+
         const response1 = await fetch('https://raw.githubusercontent.com/drmlive/fancode-live-events/refs/heads/main/fancode.json');
         const data1 = await response1.json();
+        console.log("Fetched FanCode data:", data1);
+
         const matches1 = data1.matches.map(match => ({
             ...match,
             category: 'FanCode',
@@ -27,6 +38,8 @@ async function fetchMatchData() {
 
         const response2 = await fetch('https://raw.githubusercontent.com/drmlive/sliv-live-events/refs/heads/main/sonyliv.json');
         const data2 = await response2.json();
+        console.log("Fetched SonyLIV data:", data2);
+
         const matches2 = data2.matches.map(match => ({
             ...match,
             category: 'SonyLIV'
@@ -45,13 +58,15 @@ async function fetchMatchData() {
                 subcategory: 'General',
                 match_name: 'Bein Sports 1',
                 src: 'https://www.kds.tw/upload/images/logo/logo/6615e67686998_5g00.png',
-                dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=abein1', 
+                dai_url: 'https://livecrichdofficial.pages.dev/cricxfootball?id=abein1',
             },
             // Add more liveChannels data...
         ];
 
         const response3 = await fetch('https://raw.githubusercontent.com/GyanibroCricketChannel/Jiocinema/refs/heads/main/index.html');
         const data3 = await response3.text();
+        console.log("Fetched JioCinema data:", data3);
+
         const regex = /src="(https:\/\/gyanibro2024\.github\.io\/Players\/\?dtv=https:\/\/[^\"]+)"/g;
         const jiocinemaMatches = [];
         let match;
@@ -60,7 +75,7 @@ async function fetchMatchData() {
             const dtvUrl = match[1].split('?dtv=')[1];
 
             if (dtvUrl && dtvUrl.includes(".m3u8")) {
-                const matchName = "Pak vs SA"; 
+                const matchName = "Pak vs SA";
                 let thumbnailUrl = "";
 
                 if (matchName === "Pak vs SA") {
@@ -88,12 +103,15 @@ async function fetchMatchData() {
         const allMatches = [...liveChannels, ...matches1, ...matches2, ...jiocinemaMatches];
         displayCategories(allMatches);
         setHeaderBackground(allMatches);
+
     } catch (error) {
         console.error("Error fetching match data:", error);
     }
 }
 
 function displayCategories(matches) {
+    console.log("Displaying categories...");
+
     const categories = {};
     matches.forEach(match => {
         if (!match.src || !match.dai_url) {
@@ -160,6 +178,8 @@ function createCategorySection(category, subcategories) {
 }
 
 function setHeaderBackground(matches) {
+    console.log("Setting header background...");
+
     const randomMatch = matches[Math.floor(Math.random() * matches.length)];
     header.style.backgroundImage = `url('${randomMatch.src}')`;
 }
