@@ -213,8 +213,8 @@ while ((match = regex.exec(data3)) !== null) {
 jiocinemaMatches.push({
   category: 'JioCinema',
   subcategory: 'General',
-  match_name: "Big Boss",
-  src: "https://v3img.voot.com/v3Storage/assets/16x9-1728316195515.jpg",
+  match_name: "Big Boss Kannada",
+  src: "https://kannada.cdn.zeenews.com/kannada/sites/default/files/styles/zm_700x400/public/2024/12/09/473724-bigg-boss-1.jpg?itok=yLfD6-TU",
   dai_url: "https://prod-ent-live-cf.jiocinema.com/hls/live/2106328/hd_akamai_iosmob_avc_eptv_bbkannada_day87/master.m3u8",
 });
 
