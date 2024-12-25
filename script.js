@@ -209,12 +209,20 @@ while ((match = regex.exec(data3)) !== null) {
   }
 }
 
+jiocinemaMatches.push({
+  category: 'JioCinema',
+  subcategory: 'General',
+  match_name: "Big Boss Hindi",
+  src: "https://v3img.voot.com/resizeMedium,w_1090,h_613/v3Storage/assets/16x9-1728316195515.jpg",
+  dai_url: "https://prod-ent-live-cf.jiocinema.com/hls/live/2105436/hd_akamai_iosmob_avc_24x7_bbhindi_s18_day03/master.m3u8",
+});
+
 
 jiocinemaMatches.push({
   category: 'JioCinema',
   subcategory: 'General',
   match_name: "Big Boss Kannada",
-  src: "https://kannada.cdn.zeenews.com/kannada/sites/default/files/styles/zm_700x400/public/2024/12/09/473724-bigg-boss-1.jpg?itok=yLfD6-TU",
+  src: "https://v3img.voot.com/v3Storage/assets/16x9-1727606765857.jpg",
   dai_url: "https://prod-ent-live-cf.jiocinema.com/hls/live/2106328/hd_akamai_iosmob_avc_eptv_bbkannada_day87/master.m3u8",
 });
 
