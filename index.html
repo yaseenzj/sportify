@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch Live Sports</title>
+  <link rel="stylesheet" href="style.css"> <!-- Link to the external CSS file -->
+</head>
+<body>
+<!-- Login Page -->
+<div id="login-page" class="login-container">
+  <h1 style="margin-bottom: 0px;">Sportify v1.2.2</h1>
+<p style="font-size: 0.8em; color: #ccc; margin-top: 0;">Educational project by Yaseen</p>
+  <form id="login-form">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+  </form>
+  <p class="error-message" id="error-message">Incorrect username or password</p>
+
+  <!-- Changelog -->
+  <div id="changelog">
+    <p><strong>Changelog:</strong></p>
+    <ul>
+      <li><strong>v1.2.2:</strong> Fixed Minor Bugs, Improved UI response. </li>
+      <li><strong>v1.2.1:</strong> Added Live channels: WWE, Laliga, BBL</li>
+      <li><strong>v1.2:</strong> Added Jio/Sony Support, Updated Login Page </li>
+      <li><strong>v1.0:</strong> Initial release with login and few matches.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Main Page -->
+<div id="main-content" style="display: none;">
+  <header id="header" style="background-image: url('');">
+    <div class="header-overlay"></div>
+    <div class="header-content">
+      <h1>Watch ANY match for free</h1>
+      <p>This is made for educational purposes.</p>
+      <p>Dont see the match u want? DM @wihyaseen </p>
+    </div>
+  </header>
+
+  <section class="content" id="match-categories"></section>
+</div>
+
+<script src="script.js"></script> <!-- Link to the external JavaScript file -->
+</body>
+</html>
