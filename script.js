@@ -79,7 +79,7 @@ jiocinemaMatches.push({
   subcategory: 'Works on PC/Phone',
   match_name: "Big Boss Kannada",
   src: "https://v3img.voot.com/v3Storage/assets/16x9-1727606765857.jpg",
-  dai_url: "https://prod-ent-live-cf.jiocinema.com/hls/live/2106328/hd_akamai_iosmob_avc_eptv_bbkannada_day98/master.m3u8",
+  dai_url: "https://prod-ent-live-cf.jiocinema.com/hls/live/2106328/hd_akamai_iosmob_avc_eptv_bbkannada_day99/master.m3u8",
 });
 
 
