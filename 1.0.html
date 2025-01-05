@@ -253,8 +253,8 @@
     async function fetchMatchData() {
       try {
         const [fancodeResponse, sonylivResponse] = await Promise.all([ 
-          fetch('https://raw.githubusercontent.com/drmlive/fancode-live-events/refs/heads/main/fancode.json'),
-          fetch('https://raw.githubusercontent.com/drmlive/sliv-live-events/refs/heads/main/sonyliv.json'),
+          fetch('https://cdn.jsdelivr.net/gh/drmlive/fancode-live-events@main/fancode.json'),
+          fetch('https://cdn.jsdelivr.net/gh/drmlive/sliv-live-events@main/sonyliv.json'),
         ]);
 
         const fancodeData = await fancodeResponse.json();
