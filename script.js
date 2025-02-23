@@ -32,17 +32,18 @@ async function fetchMatchData() {
     const data1 = await response1.json();
     const matches1 = data1.matches.map(match => ({
       ...match,
-      category: 'Ongoing Matches',
-      subcategory: 'Works on PC/Phone'
+      category: 'Champions Trophy 2025',
+      subcategory: 'Ongoing Matches'
     }));
 
     const response2 = await fetch('https://raw.githubusercontent.com/drmlive/sliv-live-events/refs/heads/main/sonyliv.json');
     const data2 = await response2.json();
     const matches2 = data2.matches.map(match => ({
       ...match,
-      category: 'Ongoing Matches',
-      subcategory: 'Works on PC/Phone'
+      category: 'Champions Trophy 2025', 
+      subcategory: 'Ongoing Matches'
     }));
+
 
 
     const response3 = await fetch('https://raw.githubusercontent.com/GyanibroCricketChannel/Jiocinema/refs/heads/main/index.html');
@@ -93,6 +94,13 @@ async function fetchMatchData() {
         category: 'Champions Trophy 2025',
         subcategory: 'PAK vs IND MATCH',
         match_name: 'PAK VS IND',
+        src: 'https://media.licdn.com/dms/image/v2/D5612AQGZi7qw1JuwNQ/article-cover_image-shrink_720_1280/B56ZUE69FCHEAI-/0/1739544319212?e=2147483647&v=beta&t=HS8J8LBheelhH-13H6n7c8iZ85_LXYen-uQ_-iifdwg',
+        dai_url: 'https://vkvsd14.okcdn.ru/cmaf/7966929783340/sig/x84muKF6EU4/expires/1740380574186/srcIp/172.69.178.72/urls/45.136.22.58/clientType/13/srcAg/CHROME/mid/9319446489900/get/hls_9319446489900.OnURj29hmec.m3u8',
+      },
+      {
+        category: 'Champions Trophy 2025',
+        subcategory: 'PAK vs IND MATCH',
+        match_name: 'PAK VS IND',
         src: 'https://tv.krirangon.com/upload/Channel%20Logo/SKY%20Sports%20Cricket.jpg',
         dai_url: 'https://hocdn.news/live/skyscric.m3u8',
       },
@@ -114,8 +122,8 @@ async function fetchMatchData() {
         category: 'Champions Trophy 2025',
         subcategory: 'PAK vs IND MATCH',
         match_name: 'PAK VS IND',
-        src: 'https://cricketkeeda.in/wp-content/uploads/2023/12/images-46.jpeg',
-        dai_url: 'https://amit-1.allinonereborn.in/jiotest/app/play_53706f72747331385f315f48443d3f3d31393834',
+        src: 'https://yt3.googleusercontent.com/Vkxp0eUPeU3thlXkf9wWCtBiKdAOK-zHLoZAJnj3j8MipCw6i14c2actWWDshgU4u72rS8CzOA=s900-c-k-c0x00ffffff-no-rj',
+        dai_url: 'https://jcevents.jiocinema.com:443/bpk-tv/JC_Sports18_1HD/JCHLS/hdntl=exp=1740379322~acl=%2f*~id=aaf549ec51984c86b32dd7de3e1334c7~data=hdntl~hmac=6cac47ef5a1d17cfe6e7e05f89a9d7c67318bc114fed4c4c800feeb11814ec63/JC_Sports18_1HD-audio_108038_eng=108000-video=3728000.m3u8',
       },
       {
         category: 'Champions Trophy 2025',
@@ -300,7 +308,8 @@ async function fetchMatchData() {
     // Remove PAK vs IND from jiocinemaMatches
     jiocinemaMatches = jiocinemaMatches.filter(match => match.match_name !== "PAK vs IND");
 
-    const allMatches = [...matches1, ...matches2, ...championsTrophyMatches, ...jiocinemaMatches, ...liveChannels];
+    const allMatches = [...championsTrophyMatches, ...matches1, ...matches2, ...jiocinemaMatches, ...liveChannels];
+
 
     displayCategories(allMatches);
     setHeaderBackground(allMatches);
@@ -356,15 +365,16 @@ function createCategorySection(category, subcategories) {
       // Add both click and touch events for better mobile support
       const handleCardInteraction = () => {
         let playerUrl;
-        if (match.category === 'Live Sports Channels') {
-          playerUrl = match.dai_url;
-        } else if (match.dai_url.includes('https://amit-1.allinonereborn.in')) {
+        if (match.category === 'Live Sports Channels' || 
+            match.dai_url.includes('https://amit-1.allinonereborn.in') ||
+            match.dai_url.includes('livecrichdofficial.pages.dev')) {
           playerUrl = match.dai_url;
         } else if (match.dai_url.includes('dai')) {
           playerUrl = `https://shz.al/Sffb/livecricplayer.html?dtv=${encodeURIComponent(match.dai_url)}`;
         } else {
           playerUrl = `https://yaseenzj.github.io/sportify/player.html?dtv=${encodeURIComponent(match.dai_url)}`;
         }
+
 
         window.open(playerUrl, '_blank');
       };
