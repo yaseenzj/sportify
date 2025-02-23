@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Watch Live Sports</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #141414;
+      color: white;
+      overflow-x: hidden;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .category-section {
+      margin-bottom: 40px;
+      position: relative;
+    }
+
+    .category-section h2 {
+      font-size: 1.8em;
+      margin-bottom: 10px;
+    }
+
+    .matches-list-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .match {
+      position: relative;
+      width: calc(20% - 20px);
+      height: 140px;
+      cursor: pointer;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.7);
+    }
+
+    .match img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .match:hover img {
+      transform: scale(1.1);
+    }
+
+    .match-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .match:hover .match-overlay {
+      opacity: 1;
+    }
+
+    .match-overlay p {
+      margin: 0;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    @media (max-width: 1024px) {
+      .match {
+        width: calc(33.33% - 20px);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .match {
+        width: calc(50% - 20px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .match {
+        width: calc(100% - 20px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="main-content">
+    <header id="header" style="background-image: url('');">
+      <div class="header-overlay"></div>
+      <div class="header-content">
+        <h1>HLS Fetcher by Yaseen</h1>
+        <p>This is made for educational purposes.</p>
+        <p>Contact @wihyaseen if any bugs.</p>
+      </div>
+    </header>
+
+    <section class="content" id="match-categories"></section>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const matchCategories = document.getElementById("match-categories");
+    const header = document.getElementById("header");
+
+    async function fetchMatchData() {
+      try {
+        const response1 = await fetch('https://raw.githubusercontent.com/drmlive/fancode-live-events/refs/heads/main/fancode.json');
+        const data1 = await response1.json();
+        const matches1 = data1.matches.map(match => ({
+          ...match,
+          category: match.category || 'Uncategorized',
+          subcategory: match.subcategory || 'General',
+        }));
+
+        const response2 = await fetch('https://raw.githubusercontent.com/drmlive/sliv-live-events/refs/heads/main/sonyliv.json');
+        const data2 = await response2.json();
+        const matches2 = data2.matches.map(match => ({
+          ...match,
+          category: match.category || 'Uncategorized',
+          subcategory: match.subcategory || 'General',
+        }));
+
+        const response3 = await fetch('https://raw.githubusercontent.com/GyanibroCricketChannel/Jiocinema/refs/heads/main/index.html');
+const data3 = await response3.text();
+const regex = /src="(https:\/\/gyanibro2024\.github\.io\/Players\/\?dtv=https:\/\/[^\"]+)"/g;
+const jiocinemaMatches = [];
+let match;
+
+while ((match = regex.exec(data3)) !== null) {
+  const dtvUrl = match[1].split('?dtv=')[1];
+
+  
+  if (dtvUrl && dtvUrl.includes(".m3u8")) {
+    const matchName = "Pak vs SA"; 
+    let thumbnailUrl = "";
+
+    if (matchName === "Pak vs SA") {
+      thumbnailUrl = "https://v3img.voot.com/resizeMedium,w_914,h_514/v3Storage/assets/2nd_odi_sa_vs_pak_live_clean_ctv-1734587785278.jpg";
+    }
+
+    
+    jiocinemaMatches.push({
+      category: 'JioCinema',
+      subcategory: 'General',
+      match_name: matchName,
+      src: thumbnailUrl || `https://gyanibro2024.github.io/Players/?dtv=${dtvUrl}`,
+      dai_url: dtvUrl,
+    });
+  }
+}
+
+
+jiocinemaMatches.push({
+  category: 'JioCinema',
+  subcategory: 'General',
+  match_name: "Big Boss",
+  src: "https://v3img.voot.com/v3Storage/assets/16x9-1728316195515.jpg",
+  dai_url: "https://prod-ent-live-cf.jiocinema.com/hls/live/2106328/hd_akamai_iosmob_avc_eptv_bbkannada_day87/master.m3u8",
+});
+
+        
+
+        const allMatches = [...matches1, ...matches2, ...jiocinemaMatches];
+        displayCategories(allMatches);
+        setHeaderBackground(allMatches);
+      } catch (error) {
+        console.error("Error fetching match data:", error);
+      }
+    }
+
+    function displayCategories(matches) {
+      const categories = {};
+      matches.forEach(match => {
+        const category = match.category || "Uncategorized";
+        if (!categories[category]) categories[category] = [];
+
+        categories[category].push(match);
+      });
+
+      matchCategories.innerHTML = "";
+      Object.entries(categories).forEach(([category, matches]) => {
+        createCategorySection(category, matches);
+      });
+    }
+
+    function createCategorySection(category, matches) {
+      const section = document.createElement("div");
+      section.classList.add("category-section");
+      section.innerHTML = `<h2>${category}</h2>`;
+
+      const wrapper = document.createElement("div");
+      wrapper.classList.add("matches-list-wrapper");
+
+      matches.forEach(match => {
+        const card = document.createElement("div");
+        card.classList.add("match");
+        card.innerHTML = `
+          <img src="${match.src || ''}" alt="${match.match_name || 'Match'}">
+          <div class="match-overlay">
+            <p>${match.match_name || 'Unknown Match'}</p>
+          </div>`;
+
+        card.addEventListener("click", () => {
+          const playerUrl = `https://shz.al/Sffb/livecricplayer.html?dtv=${encodeURIComponent(match.dai_url)}`;
+          window.open(playerUrl, '_blank');
+        });
+
+        wrapper.appendChild(card);
+      });
+
+      section.appendChild(wrapper);
+      matchCategories.appendChild(section);
+    }
+
+    function setHeaderBackground(matches) {
+      const randomMatch = matches[Math.floor(Math.random() * matches.length)];
+      if (randomMatch.src) {
+        header.style.backgroundImage = `url('${randomMatch.src}')`;
+      }
+    }
+
+    fetchMatchData();
+  </script>
+</body>
+</html>
