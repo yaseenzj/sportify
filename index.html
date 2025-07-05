@@ -1,61 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>Sportify by Yaseen</title>
-  <link rel="stylesheet" href="style.css"> 
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-
-
-<div id="login-page" class="login-container" ontouchstart="">
-
-  <h1 style="margin-bottom: 0px;">Sportify v1.3.2</h1>
-<p style="font-size: 0.8em; color: #ccc; margin-top: 0;"> A fun project by Yaseen</p>
-  <form id="login-form">
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="password" id="password" placeholder="Password" required>
-<button type="submit" class="touch-button">Take me in!</button>
-
-  </form>
-  <p class="error-message" id="error-message">Incorrect username or password</p>
-
-
-  <div id="changelog">
-    <p><strong>Changelog:</strong></p>
-    <ul>
-      <li><strong>Last Updated:</strong> 23/02/25</li>
-      <li><strong>v1.3.2:</strong> </li>
-      <li><strong>v1.3.1:</strong> Added custom M3U8 player to few. </li>
-      <li><strong>v1.3:</strong> Simplified Categories, Simplier layout. </li>
-    </ul>
-  </div>
-</div>
-
-
-<div id="main-content" style="display: none;">
-  <header id="header" style="background-image: url('');">
-    <div class="header-overlay"></div>
-    <div class="header-content">
-      <h1>Welcome to Sportify!</h1>
-      <p>Football = Tnt Sport / Bein Sport / NBC / USA</p>
-      <p>Cricket = Willow / Astro / Jio / Sky</p>
-      <p>Dont see the match u want? DM @wihyaseen </p>
+  <div id="login-page" class="login-container" ontouchstart="">
+    <h1 style="margin-bottom: 0px;">Sportify v1.4</h1>
+    <p style="font-size: 0.8em; color: #ccc; margin-top: 0;"> A fun project by Yaseen</p>
+    <form id="login-form">
+      <input type="text" id="username" placeholder="Username" required />
+      <input type="password" id="password" placeholder="Password" required />
+      <button type="submit" class="touch-button">Take me in!</button>
+    </form>
+    <p class="error-message" id="error-message">Incorrect username or password</p>
+    <div id="changelog">
+      <p><strong>Changelog:</strong></p>
+      <ul>
+        <li><strong>Last Updated:</strong> 06/07/25</li>
+        <li><strong>v1.4:</strong> fixed outdated links</li>
+        <li><strong>v1.3.2:</strong> added custom player</li>
+      </ul>
     </div>
-  </header>
+  </div>
 
-  <section class="content" id="match-categories"></section>
-</div>
+  <div id="app-container" style="display: none;">
+    <aside id="sidebar">
+      <div class="sidebar-icons">
+        <span title="Search">🔍</span>
+        <span id="sidebar-home" title="Home" class="active">🏠</span>
+        <span id="sidebar-live" title="Live" >📺</span>
+        <span id="sidebar-f1" title="F1">🏎️</span>
 
-<script src="script.js"></script>
-<script>
-  // Add touch event class to body
-  document.body.classList.add('touch-device');
-</script>
+        <span title="Settings">⚙️</span>
+      </div>
+    </aside>
+    <main id="main-content">
+      <section id="feature-banner"></section>
+      <section id="live-now"></section>
+      <div id="live-now">
+        <button class="carousel-arrow left">&#8249;</button>
+        <div class="horizontal-carousel" id="live-carousel"></div>
+        <button class="carousel-arrow right">&#8250;</button>
+      </div>
 
+      <section class="content" id="match-categories"></section>
+
+
+      <section class="content" id="live-section" style="display: none;">
+        <h2>Live channels</h2>
+        <div id="liveChannel" class="matches-list-wrapper"></div>
+      </section>
+
+      <section class="content" id="f1-section" style="display: none;">
+        <h2>F1 Videos</h2>
+        <div id="f1-videos" class="matches-list-wrapper"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    document.body.classList.add('touch-device');
+  </script>
 </body>
 </html>
