@@ -401,3 +401,68 @@ body {
     padding: 0 8px;
   }
 }
+#live-carousel,
+.horizontal-carousel {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  gap: 24px;
+  padding-bottom: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.carousel-card {
+  flex: 0 0 auto;
+  min-width: 180px;
+  max-width: 220px;
+  background: #181f2a;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  cursor: pointer;
+  transition: transform 0.2s;
+  position: relative;
+}
+
+.carousel-card:hover {
+  transform: scale(1.05);
+}
+
+.carousel-card img {
+  width: 100%;
+  height: 124px;
+  object-fit: cover;
+  display: block;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  font-size: 2em;
+  padding: 0 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  z-index: 2;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.carousel-arrow.left { left: 10px; }
+.carousel-arrow.right { right: 10px; }
+.carousel-arrow:active { background: rgba(0,0,0,0.7); }
+
+@media (max-width: 768px) {
+  .carousel-card { min-width: 140px; max-width: 180px; }
+}
+@media (max-width: 480px) {
+  .carousel-card { min-width: 120px; max-width: 140px; }
+}

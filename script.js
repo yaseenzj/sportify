@@ -182,7 +182,7 @@ const liveChannels = [
         dai_url: 'https://t20wc.pages.dev/willowextra',
       },
     ];
-
+// ===== Login Logic =====
 const loginForm = document.getElementById("login-form");
 loginForm.addEventListener("submit", function(event) {
   event.preventDefault();
@@ -203,7 +203,7 @@ loginForm.addEventListener("submit", function(event) {
 
 const matchCategories = document.getElementById("match-categories");
 
-// ====== Only Fancode Data ======
+// ===== Fetch Only Fancode Data =====
 async function fetchMatchData() {
   try {
     const response1 = await fetch('https://raw.githubusercontent.com/drmlive/fancode-live-events/refs/heads/main/fancode.json');
@@ -223,6 +223,7 @@ async function fetchMatchData() {
   }
 }
 
+// ===== Utility: Always open .m3u8 in custom player =====
 function openInPlayerIfM3U8(url) {
   if (url && url.endsWith('.m3u8')) {
     url = `https://yaseenzj.github.io/sportify/player.html?dtv=${encodeURIComponent(url)}`;
@@ -230,6 +231,7 @@ function openInPlayerIfM3U8(url) {
   window.open(url, '_blank');
 }
 
+// ===== Render Match Categories =====
 function displayCategories(matches) {
   matchCategories.innerHTML = "";
   const categories = {};
@@ -258,11 +260,13 @@ function displayCategories(matches) {
       categories[category][subcategory].forEach(match => {
         const matchDiv = document.createElement("div");
         matchDiv.className = "match";
+        matchDiv.style.minWidth = "44px";
+        matchDiv.style.minHeight = "44px";
         matchDiv.innerHTML = `
           <img src="${match.src}" alt="${match.match_name}">
           <div class="match-overlay"><p>${match.match_name}</p></div>
         `;
-        matchDiv.onclick = () => openInPlayerIfM3U8(match.dai_url);
+        matchDiv.addEventListener('click', () => openInPlayerIfM3U8(match.dai_url));
         matchesListWrapper.appendChild(matchDiv);
       });
       subcategoryDiv.appendChild(matchesListWrapper);
@@ -272,6 +276,7 @@ function displayCategories(matches) {
   });
 }
 
+// ===== Render Feature Banner =====
 function renderFeatureBanner(matches) {
   const ongoingMatches = matches.filter(
     m => m.category === "Champions Trophy 2025" || m.category === "Ongoing Matches"
@@ -287,21 +292,25 @@ function renderFeatureBanner(matches) {
       <div class="banner-desc">Watch ${featuredMatch.match_name} live in HD quality. Click play to start streaming instantly.</div>
       <div class="banner-meta">${featuredMatch.subcategory || ""}</div>
       <div class="banner-actions">
-        <button class="banner-btn" onclick="openInPlayerIfM3U8('${featuredMatch.dai_url}')">PLAY</button>
+        <button class="banner-btn" id="banner-play-btn">PLAY</button>
         <button class="banner-btn secondary">DETAILS</button>
         <button class="banner-btn secondary circular">🔇</button>
       </div>
     </div>
   `;
+  document.getElementById('banner-play-btn').addEventListener('click', function() {
+    openInPlayerIfM3U8(featuredMatch.dai_url);
+  });
 }
 
+// ===== Render Live Now Carousel =====
 function renderLiveNowCarousel(matches) {
   const ongoingMatches = matches.filter(
     m => m.category === "Champions Trophy 2025" || m.category === "Ongoing Matches"
   );
   if (!ongoingMatches.length) return;
 
-  const visibleCount = 5; // Show max 5 at once
+  const visibleCount = 5;
   const section = document.getElementById('live-now');
   section.innerHTML = `
     <div class="section-title">LIVE NOW</div>
@@ -313,14 +322,19 @@ function renderLiveNowCarousel(matches) {
   `;
 
   const carousel = document.getElementById('live-carousel');
+  carousel.style.overflowX = "auto";
+  carousel.style.WebkitOverflowScrolling = "touch";
+
   ongoingMatches.forEach(match => {
     const card = document.createElement('div');
     card.className = 'carousel-card';
+    card.style.minWidth = "44px";
+    card.style.minHeight = "44px";
     card.innerHTML = `
       <img src="${match.src}" alt="${match.match_name}">
       <div class="card-title">${match.match_name}</div>
     `;
-    card.onclick = () => openInPlayerIfM3U8(match.dai_url);
+    card.addEventListener('click', () => openInPlayerIfM3U8(match.dai_url));
     carousel.appendChild(card);
   });
 
@@ -370,23 +384,25 @@ function renderLiveNowCarousel(matches) {
   }, 100);
 }
 
-// Live Channels section rendering
+// ===== Render Live Channels =====
 function renderLiveChannels() {
   const liveChannelContainer = document.getElementById("liveChannel");
   liveChannelContainer.innerHTML = "";
   liveChannels.forEach(channel => {
     const div = document.createElement("div");
     div.className = "match";
+    div.style.minWidth = "44px";
+    div.style.minHeight = "44px";
     div.innerHTML = `
       <img src="${channel.src}" alt="${channel.match_name}">
       <div class="match-overlay"><p>${channel.match_name}</p></div>
     `;
-    div.onclick = () => openInPlayerIfM3U8(channel.dai_url);
+    div.addEventListener('click', () => openInPlayerIfM3U8(channel.dai_url));
     liveChannelContainer.appendChild(div);
   });
 }
 
-// F1 section rendering
+// ===== Render F1 Videos =====
 function renderF1Videos() {
   const f1Section = document.getElementById("f1-section");
   const f1VideosContainer = document.getElementById("f1-videos");
@@ -394,18 +410,19 @@ function renderF1Videos() {
   f1Videos.forEach(video => {
     const videoDiv = document.createElement("div");
     videoDiv.className = "match";
+    videoDiv.style.minWidth = "44px";
+    videoDiv.style.minHeight = "44px";
     videoDiv.innerHTML = `
       <img src="${video.thumbnail}" alt="${video.title}">
       <div class="match-overlay"><p>${video.title}</p></div>
     `;
-    videoDiv.onclick = () => openInPlayerIfM3U8(video.url);
+    videoDiv.addEventListener('click', () => openInPlayerIfM3U8(video.url));
     f1VideosContainer.appendChild(videoDiv);
   });
 }
 
-// Sidebar navigation handlers
+// ===== Sidebar Navigation =====
 document.addEventListener("DOMContentLoaded", function() {
-  // TV icon
   document.getElementById("sidebar-live").addEventListener("click", function() {
     document.getElementById("feature-banner").style.display = "none";
     document.getElementById("live-now").style.display = "none";
@@ -417,7 +434,6 @@ document.addEventListener("DOMContentLoaded", function() {
     this.classList.add('active');
   });
 
-  // Home icon
   document.getElementById("sidebar-home").addEventListener("click", function() {
     document.getElementById("feature-banner").style.display = "block";
     document.getElementById("live-now").style.display = "block";
@@ -428,7 +444,6 @@ document.addEventListener("DOMContentLoaded", function() {
     this.classList.add('active');
   });
 
-  // F1 icon
   document.getElementById("sidebar-f1").addEventListener("click", function() {
     document.getElementById("feature-banner").style.display = "none";
     document.getElementById("live-now").style.display = "none";
@@ -439,10 +454,8 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll('.sidebar-icons span').forEach(span => span.classList.remove('active'));
     this.classList.add('active');
   });
-});
 
-// For any <a href="...m3u8"> links in the DOM
-document.addEventListener('DOMContentLoaded', function() {
+  // For any <a href="...m3u8"> links in the DOM (optional, for completeness)
   document.querySelectorAll('a[href$=".m3u8"]').forEach(link => {
     link.addEventListener('click', function(event) {
       event.preventDefault();
